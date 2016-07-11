@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+{% if msg %}
+	<p>{{ msg }}</p>
+	{% else %}
+	<h5>temperature : {{ current_temperature }}</h5>
+	<h5>humidity : {{ current_humidity }} celsius</h5>
+
+	{% endif %}
+    <label>click me</label>
+    <form class="search_form" action="/search/" method="get">
+    <!-- {% csrf_token %} -->
+        <input type="text" name="q" Placeholder="search here">
+        <button type="button" class="btn btn-primary btn-lg" value="Search">
+        <span class="glyphicon glyphicon-star">search here</span>
+				<!-- <input type="text" name="q1" Placeholder="write start date">
+        <button type="button" class="btn btn-primary btn-lg" value="Search"> -->
+        </button>
+        <input type="submit" value="Search" />
+    </form>
+	{% endblock content %}
