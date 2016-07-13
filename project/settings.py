@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    #new_apps
     'weather.apps.WeatherConfig',
+    'chartjs',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -77,8 +79,11 @@ WSGI_APPLICATION = 'project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'weather_db',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': '0.0.0.0', #Change to localhost in case of local server
     }
 }
 

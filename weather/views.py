@@ -13,6 +13,11 @@ from datetime import date
 from dateutil.rrule import rrule, DAILY
 import requests
 import pyowm
+import openweather
+from datetime import datetime
+import json,ast,codecs
+from django.db import connection
+from weather.models import *
 API_KEY="68897584b12c57a6f018081baac462c2"
 
 humidity=0
@@ -30,13 +35,36 @@ def search(request):
         p.temp=temperature
         p.location=x
         p.save()
-        return render_to_response('user.html',
-    								{'current_humidity':humidity,'current_temperature':temperature['temp']}	)
+        ow = openweather.OpenWeather()
+        start_date = datetime(2013, 9, 10)
+        end_date = datetime(2013, 9, 15)
+
+        cursor = connection.cursor()
+        cursor.execute('select station_id from weather_stations where station_name = %s',[x])
+        result=cursor.fetchall()
+        print "harsh"
+        station_id= int(result[0][0])
+        print station_id
+        print type(station_id)
+        a= ow.get_historic_weather(station_id, start_date, end_date,"day")
+        my_list=[]
+        for i,value in enumerate(a):
+            my_list.append(value["temp"]["ma"])
+        print my_list
+        return render_to_response('weather_website.html',
+    								{'current_humidity':humidity,'current_temperature':temperature['temp'],'get_list':my_list}	)
     else:
         message = 'You submited an empty form'
         print("AAAAAAH")
-        return render(request, 'user.html', {'msg':message})
-#  def get_weather(request):
+        return render(request, 'weather_website.html', {'msg':message})
+# def get_weather(request):
+#      if 'q' in request.GET and request.GET['q']:
+#          x=request.GET['q']
+#
+#          # default: hourly interval
+
+#          result=cursor.fetchall()
+#
 #     if 'q' in request.GET and request.GET['q']:
 #         x=request.GET['q']
 #         urlstart = 'http://api.wunderground.com/api/9f531938a5579c5e/history_'
